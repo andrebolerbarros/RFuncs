@@ -1,15 +1,12 @@
-ggfor<-function (model, data = NULL, main = "Hazard ratio", cpositions = c(0.02, 
-                                                                    0.22, 0.4), fontsize = 0.7, refLabel = "reference", noDigits = 2) 
-{ require(broom)
+ggfor<-function (model, data = NULL, main = "Hazard ratio", cpositions = c(0.02, 0.22, 0.4), fontsize = 0.7, refLabel = "reference", noDigits = 2) 
+{ 
+  require(broom)
   require(insight)
   require(grid)
   require(ehahelper)
-
-  conf.high <- conf.low <- estimate <- NULL
-  
+  conf.high <- conf.low <- estimate <- NULL  
   data <- get_data(model, data = data)
   vars<-attr(model$terms, "term.labels")
-  
   terms<-character()
   for (i in vars){
     a<-class(data[,which(colnames(data)==i)])
