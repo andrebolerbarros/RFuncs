@@ -107,5 +107,5 @@ ggfor=function (model, data = NULL, main = "Hazard ratio", cpositions = c(0.02, 
   gt <- ggplot_gtable(ggplot_build(p))
   gt$layout$clip[gt$layout$name == "panel"] <- "off"
   ggpubr::as_ggplot(gt)
-  
+ 
 }
