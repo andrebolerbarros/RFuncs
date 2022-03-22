@@ -4,15 +4,14 @@
 This function is used to obtain the growthcurve plots and the data used to predict them, as well as the parameters of the growth curves per each well and their exploratory data analysis summary based on user-defined variables.
 
 ### Usage
-`gg_growthcurve_plate (df, metadata,  plate, correction, blank, j,  color_by, shape_by, line_colour, pt_size, line_size, vars)`  
+`gg_growthcurve_plate (df, metadata,  plate, correction, blank,  color_by, shape_by, line_colour, pt_size, line_size, vars)`  
 
 ### Arguments
-- **df:** Data-frame with ODs and corresponding wells. It's designed to accept time & Well names in columns (Format should be in "A1","A2",...), and OD values for the wells per time-point in rows;
+- **df:** Data-frame with ODs and corresponding wells. It's designed to accept time & Well names in columns (Format *has to be* be in "A1","A2",...), and OD values for the wells per time-point in rows. *The first column should be the time variable, irregardless of its name*.
 - **metadata:** Data-frame with the Wells and corresponding information. It's designed to have wells per row, with columns with the experimentally relevant information;
 - **plate:** Is the plate full or just some wells? Default is `full`. If `partial`, the `metadata` should only contain the relevant wells;
 - **correction:** Background correction used in the `GrowthCurveR` package. Default is the same as in said package, `min`;
 - **blank:** Wells corresponding to the blanks, in case the background correction selected was `blank`;
-- **j:** Corresponds to the index of the metadata's column that contain the info regarding the wells. Default is `1`;
 - **color_by:** Metadata's column that should be used for point color. *Needs to be in character*;
 - **shape_by:** Metadata's column that should be used for point shape. *Needs to be in character*;
 - **line_colour:** Color for the curves. Default is `darkgrey`. *Not designed to be a variable!*
