@@ -118,11 +118,12 @@ gg_growthcurve_plate<- function (
           strip.text = element_text(color="white"),legend.title = element_blank())
   
   tbl<- comp2 %>%
-    group_by(variable,colnames(comp2)[colnames(comp2) %in% vars]) %>%
+    group_by(variable,comp2[,c(vars)]) %>%
     summarise(Min=min(value,na.rm=T),Q1=quantile(value,0.25,na.rm=T), 
               Median=median(value,na.rm = T), Q3=quantile(value,0.75,na.rm=T), 
               Max=max(value,na.rm=T),Mean=mean(value,na.rm=T),sd=sd(value,na.rm=T))
   
+  colnames(tbl)<-c("Parameters",vars,"Min","Q1","Median","Q3","Max","Mean","SD")
   
   return(list(df_curves=gc_plot,
          Plot_curves=g1,
