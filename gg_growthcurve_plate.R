@@ -19,8 +19,11 @@ gg_growthcurve_plate<- function (
   library(reshape2)
   library(dplyr) 
   
-  #create a new column, to make sure you have one with "Wells" on it
-  metadata$Wells<-metadata[,j]
+  #Warnings & General Errors
+  if (!("Wells" %in% colnames(metadata))) {stop("There is no column called wells in metadata")}
+  if (!(color_by %in% colnames(metadata))) {stop("Color variable is not in metadata")}
+  if (!(shape_by %in% colnames(metadata))) {stop("Shape variable is not in metadata")}
+  if (all((vars %in% colnames(metadata)))==F) {stop("vars not in metadata")}
   
   #Create a vector with letters & numbers to show a plot similar to 96 Well-plate
   wells<-paste(rep(LETTERS[seq( from = 1, to = 8 )],each=12),
@@ -29,18 +32,18 @@ gg_growthcurve_plate<- function (
     wells<-wells
     
   } else if (plate=="partial") {
-    wells<-wells[wells %in% metadata[,j]]
+    wells<-wells[wells %in% metadata$Wells]
   } else {
     stop("Invalid plate atribute")
   }
   
   #Order the columns of our plate accordingly with the plate setup
-  df<-df[,colnames(df) %in% c("time",wells)]
-  df<-df[,c("time",wells)]
+  df<-df[,colnames(df) %in% c(colnames(df)[1],wells)]
+  df<-df[,c(colnames(df)[1],wells)]
   
   #Organize the metadata information based on the plate setup
-  metadata[,j]<-factor(metadata[,j],levels=wells)
-  metadata<-metadata[order(metadata[,j]),]
+  metadata$Wells<-factor(metadata$Wells,levels=wells)
+  metadata<-metadata[order(metadata$Wells),]
   
   #Create a dataframe to save information regarding the parameters of growthcurves
   gc_info <- data.frame(well=NA, k=NA, n0=NA,
@@ -57,14 +60,14 @@ gg_growthcurve_plate<- function (
   for (i in wells) {
     
     #Calculate the parameters individually for each combination of time & well. Important to assign the right method for correction and the corresponding columns, if you are to choose the blank option
-    calc<-SummarizeGrowth(df$time,df[,colnames(df)==i],bg_correct = correction,blank=blank)
+    calc<-SummarizeGrowth(df[,1],df[,colnames(df)==i],bg_correct = correction,blank=blank)
     
     #Save and collect the information regarding the estimates produced by the model & bind with the data.frame produced from the previous iteration
     gc_info<-rbind(gc_info,c(NA,as.numeric(calc$vals[c(1,4,7,10:16)])))
     
     #Create a temporary dataset, that you store the points & predicted growth curve, alongside with the information from the metadata
     temp<-data.frame(Well=i,Time=calc$data$t,OD=calc$data$N,Exp=predict(calc$model),
-                     metadata[metadata[,j]==i,])
+                     metadata[metadata$Wells==i,])
     
     gc_plot<-rbind(gc_plot,temp)
     
@@ -84,7 +87,7 @@ gg_growthcurve_plate<- function (
   
   
   g1<-ggplot(data=gc_plot,aes(x=Time,y=OD,color=cl1,shape=shp1))+
-    geom_point(alpha=0.5,size=pt_size)+
+    geom_point(alpha=0.5,size=pt_size)+xlab("Time")+ylab("OD")+
     ggtitle("Growth Curves - Plate Plot")+
     geom_line(aes(y=Exp),colour=line_colour,size=line_size)+
     facet_wrap(~Well,ncol=12,nrow=8)+
@@ -110,8 +113,8 @@ gg_growthcurve_plate<- function (
   
   g2<-ggplot(data = comp2,aes(x=cl2,y=value,
                               color=cl2,shape=shp2))+
-    geom_point(alpha=0.7)+ggtitle("Growth Curves - Parameters")+
-    facet_wrap(~variable,scales = "free_y")+
+    geom_point(alpha=0.7,size=pt_size)+ggtitle("Growth Curves - Parameters")+
+    facet_wrap(~variable,scales = "free_y")+xlab("")+ylab("")+
     theme_minimal()+
     theme(strip.background=element_rect(fill="black"),
           plot.title = element_text(hjust=0.5,size=20),
