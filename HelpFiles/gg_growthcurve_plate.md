@@ -7,7 +7,7 @@ This function is used to obtain the growthcurve plots and the data used to predi
 `gg_growthcurve_plate (df, metadata,  plate, correction, blank, j,  color_by, shape_by, line_colour, pt_size, line_size, vars)`  
 
 ### Arguments
-- **df:** Data-frame with ODs and corresponding wells. It's design for time & Well names in columns, ODs for wells per timepoint per row;
+- **df:** Data-frame with ODs and corresponding wells. It's designed to accept time & Well names in columns (Format should be in "A1","A2",...), and OD values for the wells per time-point in rows;
 - **metadata:** Data-frame with the Wells and corresponding information. It's designed to have wells per row, with columns with the experimentally relevant information;
 - **plate:** Is the plate full or just some wells? Default is `full`. If `partial`, the `metadata` should only contain the relevant wells;
 - **correction:** Background correction used in the `GrowthCurveR` package. Default is the same as in said package, `min`;
@@ -34,9 +34,9 @@ André Boler Barros
 ```
 library(growthcurver)
 df<-growthdata #Using the information from the growthcurver package
-metadata<-data.frame(Bacteria=rep(rep(c("WT","BactA","BactC","BactD"),each=4),times=6),
+metadata<-data.frame(Bacteria=rep(rep(c("WT","BactA","BactB","BactC"),each=4),times=6),
                      Wells=colnames(df)[-1]) #Creating metadata information, 
 
-metadata$Bacteria<-factor(metadata$Bacteria,levels=c("WT","BactA","BactB","BactC","BactD")) #Ordering the variable 'Bacteria'
+metadata$Bacteria<-factor(metadata$Bacteria,levels=c("WT","BactA","BactB","BactC")) #Ordering the variable 'Bacteria'
 p1<-gg_growthcurve_plate(df=df,metadata = metadata,plate="partial",correction="min",j=2,color_by = "Bacteria",vars="Bacteria",shape=NULL,pt_size=2)
 ```
