@@ -9,7 +9,7 @@ This function is used to obtain the growthcurve plots and the data used to predi
 ### Arguments
 - **df:** Data-frame with ODs and corresponding wells. It's design for time & Well names in columns, ODs for wells per timepoint per row;
 - **metadata:** Data-frame with the Wells and corresponding information. It's designed to have wells per row, with columns with the experimentally relevant information;
-- **plate:** Is the plate full or just some wells? Default is `full`;
+- **plate:** Is the plate full or just some wells? Default is `full`. If `partial`, the `metadata` should only contain the relevant wells;
 - **correction:** Background correction used in the `GrowthCurveR` package. Default is the same as in said package, `min`;
 - **blank:** Wells corresponding to the blanks, in case the background correction selected was `blank`;
 - **j:** Corresponds to the index of the metadata's column that contain the info regarding the wells. Default is `1`;
