@@ -123,7 +123,7 @@ gg_growthcurve_plate<- function (
     theme_bw()+
     theme(strip.background=element_rect(fill="black"),
           plot.title = element_text(hjust=0.5,size=20),
-          strip.text = element_text(color="white"),legend.title = element_blank())
+          strip.text = element_text(color="white",size=14),legend.title = element_blank())
   
   tbl<- comp2 %>%
     group_by(variable,comp2[,c(vars)]) %>%
