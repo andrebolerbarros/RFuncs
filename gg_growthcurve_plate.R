@@ -3,7 +3,6 @@ gg_growthcurve_plate<- function (
   metadata=NA, #Metadata data-frame, with wells per rows
   plate="full", #Is a full plate or only some wells?
   correction=c("min","none","blank"), #Background correction used in GrowthCurveR package. Default is min.
-  j=1, #Column ID for the Wells in metadata. Default is 1
   blank=NA, #Necessary in case you choose "blank" in the correction
   color_by=NULL, #Column that should be used for color. Needs to be in character
   shape_by=NULL, #Column that should be used for shape. Needs to be in character
@@ -47,7 +46,7 @@ gg_growthcurve_plate<- function (
   
   #Create a dataframe to save information regarding the parameters of growthcurves
   gc_info <- data.frame(well=NA, k=NA, n0=NA,
-                        r=NA, sigma=NA,df=NA,t_mid=NA,t_gen=NA,
+                        r=NA, sigma=NA,t_mid=NA,t_gen=NA,
                         auc_l=NA,  auc_e=NA,note=NA)
   
   
@@ -63,18 +62,23 @@ gg_growthcurve_plate<- function (
     calc<-SummarizeGrowth(df[,1],df[,colnames(df)==i],bg_correct = correction,blank=blank)
     
     #Save and collect the information regarding the estimates produced by the model & bind with the data.frame produced from the previous iteration
-    gc_info<-rbind(gc_info,c(NA,as.numeric(calc$vals[c(1,4,7,10:16)])))
+    temp1<-data.frame(well=NA, k=calc$vals$k, n0=calc$vals$n0,
+                      r=calc$vals$r, sigma=calc$vals$sigma,t_mid=calc$vals$t_mid,t_gen=calc$vals$t_gen,
+                      auc_l=calc$vals$auc_l,  auc_e=calc$vals$auc_e,note=calc$vals$note)
     
+    
+    
+    gc_info<-rbind(gc_info,temp1)
     #Create a temporary dataset, that you store the points & predicted growth curve, alongside with the information from the metadata
     temp<-data.frame(Well=i,Time=calc$data$t,OD=calc$data$N,Exp=predict(calc$model),
                      metadata[metadata$Wells==i,])
-    
     gc_plot<-rbind(gc_plot,temp)
     
   }
   
   gc_info<-gc_info[-1,]
   gc_plot<-gc_plot[-1,]
+  
   
   #This will allow for the right order to appear on the data.frame, an order similar to the plate structures
   gc_info$well<-wells
@@ -91,7 +95,7 @@ gg_growthcurve_plate<- function (
     ggtitle("Growth Curves - Plate Plot")+
     geom_line(aes(y=Exp),colour=line_colour,size=line_size)+
     facet_wrap(~Well,ncol=12,nrow=8)+
-    theme_bw()+  
+    theme_classic()+  
     theme(strip.text = element_text(size=12),
           plot.title = element_text(hjust=0.5,size=20),
           legend.title = element_blank())
@@ -104,7 +108,8 @@ gg_growthcurve_plate<- function (
     stop("Ups! Something's not right here!")
   }
   
-  comp1<-cbind(gc_info[,-11],metadata)
+  comp0<-cbind(gc_info,metadata)
+  comp1<-cbind(gc_info[,-10],metadata)
   comp2<-melt(comp1,id=c("well","Wells",vars))
   
   
@@ -115,7 +120,7 @@ gg_growthcurve_plate<- function (
                               color=cl2,shape=shp2))+
     geom_point(alpha=0.7,size=pt_size)+ggtitle("Growth Curves - Parameters")+
     facet_wrap(~variable,scales = "free_y")+xlab("")+ylab("")+
-    theme_bw()+
+    theme_minimal()+
     theme(strip.background=element_rect(fill="black"),
           plot.title = element_text(hjust=0.5,size=20),
           strip.text = element_text(color="white"),legend.title = element_blank())
@@ -129,9 +134,9 @@ gg_growthcurve_plate<- function (
   colnames(tbl)<-c("Parameters",vars,"Min","Q1","Median","Q3","Max","Mean","SD")
   
   return(list(df_curves=gc_plot,
-         Plot_curves=g1,
-         df_Param =comp1,
-         Summ_Param =tbl,
-         Plot_Param =g2))
+              Plot_curves=g1,
+              df_Param =comp0,
+              Summ_Param =tbl,
+              Plot_Param =g2))
   
 }
