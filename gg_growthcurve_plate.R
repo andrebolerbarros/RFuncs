@@ -95,7 +95,7 @@ gg_growthcurve_plate<- function (
     ggtitle("Growth Curves - Plate Plot")+
     geom_line(aes(y=Exp),colour=line_colour,size=line_size)+
     facet_wrap(~Well,ncol=12,nrow=8)+
-    theme_classic()+  
+    theme_bw()+  
     theme(strip.text = element_text(size=12),
           plot.title = element_text(hjust=0.5,size=20),
           legend.title = element_blank())
@@ -120,7 +120,7 @@ gg_growthcurve_plate<- function (
                               color=cl2,shape=shp2))+
     geom_point(alpha=0.7,size=pt_size)+ggtitle("Growth Curves - Parameters")+
     facet_wrap(~variable,scales = "free_y")+xlab("")+ylab("")+
-    theme_minimal()+
+    theme_bw()+
     theme(strip.background=element_rect(fill="black"),
           plot.title = element_text(hjust=0.5,size=20),
           strip.text = element_text(color="white"),legend.title = element_blank())
