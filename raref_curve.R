@@ -1,5 +1,8 @@
 raref_curve <- function  (obj=NA,by=500) {
   
+  require(phyloseq)
+  require(ggplot2)
+  
   if (class(obj)!="phyloseq") {stop("Supplied Object is not a phyloseq object!")}
   samples<-vector()
   obs<-vector()
@@ -42,10 +45,9 @@ raref_curve <- function  (obj=NA,by=500) {
     theme_bw()+
     theme(plot.title = element_text(hjust = 0.5),legend.title=element_blank(),legend.position = "none")
   
-  grid.arrange(g1,g2,nrow=2)
+  p<-list(g1,g2m)
+  names(p)<-c("RSVs","ShannonIndex")
+  
+  return(p)
   
 }
-
-
-
-
