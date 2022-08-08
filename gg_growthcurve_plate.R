@@ -69,9 +69,16 @@ gg_growthcurve_plate<- function (
     
     
     gc_info<-rbind(gc_info,temp1)
+     
+   #As of 8th August 2022, problem of "cannot fit the data" is solved in this line - if there is no model, then there will not be any prediction
+    if (length(calc$model)>1) {Exp=predict(calc$model)} else {Exp=NA}
+        
     #Create a temporary dataset, that you store the points & predicted growth curve, alongside with the information from the metadata
-    temp<-data.frame(Well=i,Time=calc$data$t,OD=calc$data$N,Exp=predict(calc$model),
+    temp<-data.frame(Well=i,Time=calc$data$t,OD=calc$data$N,Exp=Exp,
                      metadata[metadata$Wells==i,])
+    gc_plot<-rbind(gc_plot,temp)
+    
+  }
     gc_plot<-rbind(gc_plot,temp)
     
   }
