@@ -18,6 +18,8 @@ gg_growthcurve_plate<- function (
   library(reshape2)
   library(dplyr) 
   
+  options(dplyr.summarise.inform = FALSE)
+  
   #Warnings & General Errors
   if (!("Wells" %in% colnames(metadata))) {stop("There is no column called wells in metadata")}
   if (!(color_by %in% colnames(metadata))) {stop("Color variable is not in metadata")}
