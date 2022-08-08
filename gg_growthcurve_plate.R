@@ -79,9 +79,6 @@ gg_growthcurve_plate<- function (
     gc_plot<-rbind(gc_plot,temp)
     
   }
-    gc_plot<-rbind(gc_plot,temp)
-    
-  }
   
   gc_info<-gc_info[-1,]
   gc_plot<-gc_plot[-1,]
