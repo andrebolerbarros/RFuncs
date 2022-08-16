@@ -118,6 +118,7 @@ gg_growthcurve_plate<- function (
   comp1<-cbind(gc_info[,-10],metadata)
   comp2<-melt(comp1,id=c("well","Wells",vars))
   
+  if (any(comp0$note!="")) {warning("Some of the wells have wells with model issues. Be careful! These are still ploted")}
   
   if (is.null(color_by)) {cl2= NULL} else {cl2= comp2[,which(colnames(comp2)==color_by)]}
   if (is.null(shape_by)) {shp2=NULL} else {shp2=comp2[,which(colnames(comp2)==shape_by)]}
