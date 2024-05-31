@@ -45,7 +45,7 @@ raref_curve <- function  (obj=NA,by=500) {
     theme_bw()+
     theme(plot.title = element_text(hjust = 0.5),legend.title=element_blank(),legend.position = "none")
   
-  p<-list(g1,g2m)
+  p<-list(g1,g2)
   names(p)<-c("RSVs","ShannonIndex")
   
   return(p)
