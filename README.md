@@ -7,4 +7,6 @@ This repository is composed by R functions adapted/developed by me in order to a
 
 [gg_growthcurve_plate:](gg_growthcurve_plate.R) Function to calculate & plot the growth curves, as well as save and plot the corresponding parameters. [Help  Page](HelpFiles/gg_growthcurve_plate.md)
 
+[numeric_to_dates:](numeric_to_dates.R) Function to transform numbers into dates.
+
 [raref_curve:](raref_curve.R) Function to perform rarefaction curves in `phyloseq` object. Normally used to ascertain the sequencing depth to which rarefy samples.
